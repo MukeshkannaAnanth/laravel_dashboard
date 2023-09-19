@@ -265,7 +265,7 @@
                             </div>
                         <div class="table-responsive p-0">
                             
-                          <table class="table align-items-center mb-0" id="t1">
+                          <table class="table align-items-center mb-0" id="table1">
                             <thead>
                               <tr>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Product Brand</th>
@@ -315,16 +315,25 @@
                             <div class="col-md-3">
                               <div class="form-group">
                                 <label for="example-text-input" class="form-control-label">Paid Amount</label>
-                                <input class="form-control" type="text" name="paid_amt">
+                                <input class="form-control" type="text" name="paid_amt" id="paid_amt">
+                                <div class="errr_msg_paid" style="display: none">
+                                  <p style="font-size: 11px;text-align:center;color:red">Paid Amount is grater then Total Amount</p>
+                                </div>
                               </div>
                             </div>
                             <div class="col-md-3">
                               <div class="form-group">
                                 <label for="example-text-input" class="form-control-label">Balance Amount</label>
-                                <input class="form-control" type="text" name="balance_amount">
+                                <input class="form-control" type="text" name="balance_amount" id="balance_amount">
+                                
                               </div>
                             </div>
-                            
+                            <div class="col-md-3">
+                              <div class="form-group">
+                                <label for="example-text-input" class="form-control-label">Total Amount</label>
+                                <input class="form-control" type="text" name="totamt" id="totamt">
+                              </div>
+                            </div>
                           </div>
                           
                       </div>
@@ -480,6 +489,39 @@
 
 
 <script>
+ function get_last_val(){
+  var keys = [];
+  var myData = [];
+  $("table thead th").each(function() {
+    var k = $(this).text().trim().toLowerCase();
+    keys.push(k);
+  });
+  $("table tbody tr").each(function(i, el) {
+    var row = {}
+    $.each(keys, function(k, v) {
+      row[v] = $("input[id='total']", el).val().trim();
+    });
+    myData.push(row);
+  });
+
+console.log(myData);
+
+ let text = [];
+for (let i = 0; i < myData.length; i++) {
+  text += myData[i]['total']+" ";
+}
+var array = text.split(' ').map(function(n) {
+    return Number(n);
+});
+
+return array;
+ }
+</script>
+
+
+
+
+<script>
   function closemodel()
   {
     $('#debitcard').modal('hide');
@@ -497,6 +539,17 @@
 
 <script>
   $(document).on('change','#payment_by',function(){
+  
+
+
+   
+
+  // console.log(sum(get_last_val()));
+
+
+    
+
+   
     if($(this).val().trim()=='COD'){
       $('#debitcard').modal('show');
 
@@ -507,7 +560,15 @@
     
   });
 </script>
-
+<script>
+  function sum(array){
+    var total = 0;
+      $.each(array,function() {
+      total += parseInt(this, 10);
+     });
+     return total;
+  }
+</script>
 
 <script>
     $(document).on('click','#addbilling_product',function(){
@@ -530,7 +591,7 @@
                   // console.log(arr);
     
               var data = JSON.parse(response);
-              $('#tablebody').append('<tr><td class="align-middle text-center"><select type="text" name="product_brand[]" id="tags" class="form-control"><option>Select</option>'+data+'</select></td><td class="align-middle text-center"><select type="text" name="product_name[]" id="product_name1" class="form-control"></select></td><td class="align-middle text-center"><input type="text" name="product_rate[]" id="product_rate1" readonly tabindex="-1" class="form-control"></td><td class="align-middle text-center"><input type="text"  name="product_qty[]" id="qtypro" class="form-control"></td><td class="align-middle text-center"><input type="text" name="product_tot[]" id="total" class="form-control total"></td><td class="align-middle text-center"><a href=""><img src="../assets/img/remove-from-cart.png" alt="" width="30px" height="30px" onclick="return false;" id="removeproduct"></a</td></tr>')
+              $('#tablebody').append('<tr><td class="align-middle text-center"><select type="text" name="product_brand[]" id="tags" class="form-control"><option>Select</option>'+data+'</select></td><td class="align-middle text-center"><select type="text" name="product_name[]" id="product_name1" class="form-control"></select></td><td class="align-middle text-center"><input type="text" name="product_rate[]" id="product_rate1" readonly tabindex="-1" class="form-control"></td><td class="align-middle text-center"><input type="text"  name="product_qty[]" id="qtypro" class="form-control"></td><td class="align-middle text-center"><input type="number" name="product_tot[]" id="total" readonly class="form-control total"></td><td class="align-middle text-center"><a href=""><img src="../assets/img/remove-from-cart.png" alt="" width="30px" height="30px" onclick="return false;"  id="removeproduct"></a</td></tr>')
   
             }
        })
@@ -592,12 +653,35 @@
      
     var product_rate = tr.find('#product_rate1').val();
     totalprice=parseInt(product)*parseFloat(product_rate);
+
     console.log(totalprice);
-    tr.find("#total").val(totalprice);
-  
+    tr.find("#total").attr('value',((totalprice=='NaN')? 0 : totalprice));
+      
+
+     $('#totamt').val(Number(sum(get_last_val())));
   });
 </script>
 
+<script>
+  $(document).on('keyup','#paid_amt',function(){
+     var paid_amt = $(this).val();
+     var totamt = $('#totamt').val();
+
+     balance_amt = parseInt(paid_amt)-parseFloat(totamt).toString();
+     $('#balance_amount').val(balance_amt.toString());
+     console.log(paid_amt);
+     if(paid_amt > totamt){
+      $('.errr_msg_paid').css('display','block');
+     }else{
+      $('.errr_msg_paid').css('display','none');
+     }
+  });
+</script>
+
+<script>
+  var str="cat1234";
+console.log("using slice =",str.slice(1));
+</script>
 
 <script>
     $("table").on("click", "#removeproduct", function() {
@@ -614,7 +698,7 @@
 
   $("#addbilling").keyup(function(event) {
     const key = event.key; // const {key} = event; ES6+
-    if (key === "Backspace" || key === "Delete") {
+    if (key === "Delete") {
         $("#removeproduct").click();
     }
 });

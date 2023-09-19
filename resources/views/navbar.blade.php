@@ -107,9 +107,17 @@
           </a>
         </li>
         <li class="nav-item">
+          <a class="nav-link @if(request()->url()==route('addcan_customer')) active bg-primary text-white @endif" href="{{route('addcan_customer')}}">
+            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <img src="../assets/img/cus.png" alt="" width="30px" height="30px"><img src="../assets/img/can.png" alt="" width="30px" height="30px">
+            </div>
+            <span class="nav-link-text ms-1">Add Can Customer</span>
+          </a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link @if(request()->url()==route('billingcan')) active bg-primary text-white @endif" href="{{route('billingcan')}}">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <img src="../assets/img/invoice.png" alt="" width="30px" height="30px">
+              <img src="../assets/img/can.png" alt="" width="30px" height="30px">
             </div>
             <span class="nav-link-text ms-1">Water Can</span>
           </a>

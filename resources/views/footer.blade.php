@@ -91,8 +91,19 @@
 
   <script>
 
+var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
+var today = new Date();
 
+let text = [];
+for (let i = 0; i <= today.getMonth(); i++) {
+  text += monthNames[i] + " ";
+}
+arr = text.split(" ");
+arr1 = $.grep(arr,function(n){
+        return(n);
+    });
+console.log(arr1);
 
     var ctx1 = document.getElementById("chart-line").getContext("2d");
 
@@ -104,7 +115,7 @@
     new Chart(ctx1, {
       type: "line",
       data: {
-        labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        labels: arr1,
         datasets: [{
           label: "Mobile apps",
           tension: 0.4,

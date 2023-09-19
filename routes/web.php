@@ -85,6 +85,10 @@ Route::get('/Shop/Vegitable', [VegitableController::class,'index'])->name('vegit
 Route::get('/Add/Dress', [Add_DressproductComponent::class,'index'])->name('texttile'); 
 Route::get('/Add/Can', [Billing_canController::class,'index'])->name('billingcan'); 
 
+Route::get('Add/canCustomer/',function(){
+    return view('can_customer');
+})->name('addcan_customer');
+
 //Route::get('/Add/Dress', [Add_DressproductComponent::class,'index'])->name('texttile'); 
 // route for function ---------------
 
